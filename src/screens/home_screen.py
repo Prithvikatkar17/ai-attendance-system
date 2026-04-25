@@ -1,6 +1,10 @@
 import streamlit as st
 
+from src.ui.base_layout import style_base_layout , style_background_home
+
 def home_screen():
+    style_background_home()
+    style_base_layout()
     st.header("Home Screen")
 
 
