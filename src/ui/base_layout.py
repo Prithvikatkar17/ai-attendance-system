@@ -7,7 +7,7 @@ def style_background_dashboard():
 
     <style>
             .stApp {
-                background-color: #ffffff  !important;
+                background-color: #0D1B2A   !important;
             }
         
     </style>
@@ -68,11 +68,15 @@ def style_base_layout():
             font-size: 2rem !important;
             line-height: 1.1 !important; 
             margin-bottom: 0rem !important;   
+            color: #E0E3FF !important;
             }
-                
+
+        h3{
+            font-family: 'Russo One', sans-serif !important;
+            font-size: 2.5rem !important;}    
 
 
-        h3,h4,p{
+        h4,p{
             font-family: 'Bebas Neue', sans-serif !important;
         }
                 
