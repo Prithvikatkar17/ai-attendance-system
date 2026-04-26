@@ -6,17 +6,23 @@ from src.components.footer import footer_dashboard
 def teacher_screen():
     style_background_dashboard()
     style_base_layout()
-    teacher_screen_login()
+    
 
+
+    if 'teacher_login_type' not in  st.session_state or st.session_state.teacher_login_type=="login":
+        teacher_screen_login()
+    elif st.session_state.teacher_login_type == "register":
+        teacher_screen_register()
     
 def teacher_screen_login():
     c1, c2 = st.columns(2,vertical_alignment='center',gap='xxlarge')
     with c1:
         header_dashboard()
     with c2:
-        st.button("Go back to Home",type='secondary',icon=':material/arrow_back:',
-                  key='loginbackbtn',shortcut='ctrl+backspace',
-                  icon_position='left',on_click=lambda: st.session_state.update({'login_type':None}))
+        if st.button("Go back to Home",type='secondary',icon=':material/arrow_back:',
+                  key='loginbackbtn',shortcut='ctrl+backspace',icon_position='left'):
+            st.session_state['login_type'] = None
+            st.rerun()
     
     st.space()
     st.space()
@@ -30,11 +36,13 @@ def teacher_screen_login():
     password_input = st.text_input("Enter Password",placeholder="Password",type='password')
 
 
-    btn1 ,btn2 = st.columns(2)
-    with btn1:
-        st.button("login",icon=':material/passkey:',shortcut='control + enter',width='stretch')
-    with btn2:
-        st.button("register instead",icon=':material/passkey:',type='primary',width='stretch')
+    btnc1 ,btnc2 = st.columns(2)
+    with btnc1:
+        if st.button("login",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
+            st.session_state.teacher_login_type = 'login'
+    with btnc2:
+        if st.button("register instead",icon=':material/passkey:',type='primary',width='stretch'):
+            st.session_state.teacher_login_type = 'register'
 
     st.divider()
     
@@ -47,27 +55,36 @@ def teacher_screen_register():
     with c1:
         header_dashboard()
     with c2:
-        st.button("Go back to Home",type='secondary',icon=':material/arrow_back:',
-                  key='loginbackbtn',shortcut='ctrl+backspace',
-                  icon_position='left',on_click=lambda: st.session_state.update({'login_type':None}))
-        
-    st.space()
-    st.space()
-
-    st.subheader('login using passworsd',text_alignment='center')
+        if st.button("Go back to Home",type='secondary',icon=':material/arrow_back:',
+                  key='loginbackbtn',shortcut='ctrl+backspace',icon_position='left'):
+            st.session_state['login_type'] = None
+            st.rerun()
+    
 
     st.space()
     st.space()
 
-    teacher_input = st.text_input("Enter Username",placeholder="Username",type='default')
-    password_input = st.text_input("Enter Password",placeholder="Password",type='password')
+    st.subheader('Register your Teacher profile',text_alignment='center')
+
+    st.space()
+    st.space()
+
+    teacher_username = st.text_input("Enter Username",placeholder="Username",type='default')
+    teacher_name = st.text_input("Enter name",placeholder="name",type='default')
 
 
-    btn1 ,btn2 = st.columns(2)
-    with btn1:
-        st.button("login",icon=':material/passkey:',shortcut='control + enter',width='stretch')
-    with btn2:
-        st.button("register instead",icon=':material/passkey:',type='primary',width='stretch')
+
+    teacher_pass = st.text_input("Enter Password",placeholder="Password",type='password')
+    teacher_pass_confirm = st.text_input("Confirm Password",placeholder="Confirm Password",type='password')
+
+
+    btnc1 ,btnc2 = st.columns(2)
+    with btnc1:
+        if st.button("Resister now",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
+            st.session_state.teacher_login_type = 'register'
+    with btnc2:
+        if st.button("login instead",icon=':material/passkey:',type='primary',width='stretch'):
+            st.session_state.teacher_login_type = 'login'
 
 
     st.divider()
@@ -76,4 +93,4 @@ def teacher_screen_register():
 
 
         
-    st.header("Teacher Screen")
+    
