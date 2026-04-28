@@ -11,15 +11,21 @@ def teacher_screen():
     style_background_dashboard()
     style_base_layout()
     
-
-    if 'teacher_login_type' not in  st.session_state or st.session_state.teacher_login_type=="login":
+    if "teacher_data" in st.session_state:
+        teacher_dashboard()
+    elif 'teacher_login_type' not in  st.session_state or st.session_state.teacher_login_type=="login":
         teacher_screen_login()
     elif st.session_state.teacher_login_type == "register":
         teacher_screen_register()
 
 
 
+def teacher_dashboard():
+    data = st.session_state.teacher_data
 
+    st.header(f"""
+    Welcome ,{data['name']}!
+    """)
 
 def register_teacher(teacher_username,teacher_pass,teacher_pass_confirm,teacher_name):
     if not teacher_username or not teacher_pass or not teacher_pass_confirm or not teacher_name:
