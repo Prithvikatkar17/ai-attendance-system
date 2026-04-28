@@ -1,19 +1,48 @@
+from attr import In
 import streamlit as st
 from src.ui.base_layout import  style_base_layout , style_background_dashboard
 from src.components.header import header_dashboard
 from src.components.footer import footer_dashboard
+from src.database.db import check_teacher_exists, create_teacher, teacher_login
+
+
 
 def teacher_screen():
     style_background_dashboard()
     style_base_layout()
     
 
-
     if 'teacher_login_type' not in  st.session_state or st.session_state.teacher_login_type=="login":
         teacher_screen_login()
     elif st.session_state.teacher_login_type == "register":
         teacher_screen_register()
+
+
+
+
+
+def register_teacher(teacher_username,teacher_pass,teacher_pass_confirm,teacher_name):
+    if not teacher_username or not teacher_pass or not teacher_pass_confirm or not teacher_name:
+        return False , "All fields are required!"
+    if check_teacher_exists(teacher_username):
+        return False , "Username already exists!"
+    if teacher_pass != teacher_pass_confirm:
+        return False , "Passwords do not match!"
     
+    try:
+        create_teacher(teacher_username, teacher_pass,teacher_name)
+        return True , "registered successfully! You can now login."
+    except Exception as e:
+        return False , "An error occurred during registration. Please try again."
+# this function validates the input fields for teacher registration, checks if the username already exists, 
+# and if the passwords match. If all validations pass, it creates a new teacher record in the database. 
+# It returns a success status and a message indicating the result of the registration attempt.
+
+
+
+
+
+
 def teacher_screen_login():
     c1, c2 = st.columns(2,vertical_alignment='center',gap='xxlarge')
     with c1:
@@ -39,7 +68,15 @@ def teacher_screen_login():
     btnc1 ,btnc2 = st.columns(2)
     with btnc1:
         if st.button("login",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
-            st.session_state.teacher_login_type = 'login'
+            if teacher_login(teacher_input,password_input):
+                st.toast("Welcome back!",icon=":wave:")  # The st.toast() function is used to display a temporary notification message to the user.
+                import time
+                time.sleep(1)
+                st.rerun()
+            else:
+                st.error("Invalid username or password.")
+        else:
+            st.error("Invalid username or password.")
     with btnc2:
         if st.button("register instead",icon=':material/passkey:',type='primary',width='stretch'):
             st.session_state.teacher_login_type = 'register'
@@ -47,6 +84,11 @@ def teacher_screen_login():
     st.divider()
     
     footer_dashboard()
+
+
+
+
+
 
 
 
@@ -80,7 +122,16 @@ def teacher_screen_register():
 
     btnc1 ,btnc2 = st.columns(2)
     with btnc1:
-        st.button("Resister now",icon=':material/passkey:',shortcut='control + enter',width='stretch')
+        if st.button("Resister now",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
+            success ,message = register_teacher(teacher_username,teacher_pass,teacher_pass_confirm,teacher_name)
+            if success:
+                st.success(message)
+                import time
+                time.sleep(2)
+                st.session_state.teacher_login_type = 'login'
+                st.rerun()
+            else:
+                st.error(message)
             
     with btnc2:
         if st.button("login instead",icon=':material/passkey:',type='primary',width='stretch'):
