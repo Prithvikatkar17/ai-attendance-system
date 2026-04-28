@@ -1,4 +1,4 @@
-from attr import In
+
 import streamlit as st
 from src.ui.base_layout import  style_base_layout , style_background_dashboard
 from src.components.header import header_dashboard
@@ -69,14 +69,12 @@ def teacher_screen_login():
     with btnc1:
         if st.button("login",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
             if teacher_login(teacher_input,password_input):
-                st.toast("Welcome back!",icon=":wave:")  # The st.toast() function is used to display a temporary notification message to the user.
+                st.toast("Welcome back!",icon="👋")  # The st.toast() function is used to display a temporary notification message to the user.
                 import time
                 time.sleep(1)
                 st.rerun()
             else:
                 st.error("Invalid username or password.")
-        else:
-            st.error("Invalid username or password.")
     with btnc2:
         if st.button("register instead",icon=':material/passkey:',type='primary',width='stretch'):
             st.session_state.teacher_login_type = 'register'
