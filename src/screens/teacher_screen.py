@@ -80,8 +80,8 @@ def teacher_screen_register():
 
     btnc1 ,btnc2 = st.columns(2)
     with btnc1:
-        if st.button("Resister now",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
-            st.session_state.teacher_login_type = 'register'
+        st.button("Resister now",icon=':material/passkey:',shortcut='control + enter',width='stretch')
+            
     with btnc2:
         if st.button("login instead",icon=':material/passkey:',type='primary',width='stretch'):
             st.session_state.teacher_login_type = 'login'
