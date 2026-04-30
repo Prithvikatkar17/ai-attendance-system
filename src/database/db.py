@@ -44,4 +44,10 @@ def teacher_login(username,password):
             return teacher
     return None
     # If no matching record is found or if the password does not match, the function returns None, indicating a failed login attempt.
-    
+
+
+def get_all_students():
+    response = supabase.table('students').select('*').execute()
+    return response.data  
+# This function retrieves all records from the 'students' table in the database and returns them as a list of dictionaries. Each dictionary represents a student record with its corresponding fields and values.
+
