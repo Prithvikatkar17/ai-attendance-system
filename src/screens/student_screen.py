@@ -2,7 +2,8 @@ import streamlit as st
 from src.ui.base_layout import  style_base_layout , style_background_dashboard
 from src.components.header import header_dashboard
 from src.components.footer import footer_dashboard
-
+import numpy as np 
+from PIL import Image
 
 def student_screen():
        
@@ -24,7 +25,9 @@ def student_screen():
     st.space()
     st.space()
     
-    st.camera_input("position your face in center")
+    photo_source = st.camera_input("position your face in center")
+    if photo_source:
+        np.array(Image.open(photo_source))
 
 
     footer_dashboard()
