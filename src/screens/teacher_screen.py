@@ -27,6 +27,21 @@ def teacher_dashboard():
     Welcome ,{data['name']}!
     """)
 
+
+
+
+def login_teacher(username,password):
+    if not username or not password:
+        return False
+    teacher = teacher_login(username,password)
+
+    if teacher:
+        st.session_state.user_role = 'teacher'
+        st.session_state.teacher_data = teacher
+        st.session_state.is_logged_in = True
+        return True
+
+
 def register_teacher(teacher_username,teacher_pass,teacher_pass_confirm,teacher_name):
     if not teacher_username or not teacher_pass or not teacher_pass_confirm or not teacher_name:
         return False , "All fields are required!"
@@ -74,7 +89,7 @@ def teacher_screen_login():
     btnc1 ,btnc2 = st.columns(2)
     with btnc1:
         if st.button("login",icon=':material/passkey:',shortcut='control + enter',width='stretch'):
-            if teacher_login(teacher_input,password_input):
+            if login_teacher(teacher_input,password_input):
                 st.toast("Welcome back!",icon="👋")  # The st.toast() function is used to display a temporary notification message to the user.
                 import time
                 time.sleep(1)
