@@ -36,3 +36,30 @@ def get_face_embeddings(image_np):
         encoding.append(np.array(face_descriptor))
 
     return encoding
+
+@st.cache_resource
+def get_model_trained():
+    X = []
+    y = []
+
+    student_db = get_all_students()
+
+    if not student_db:
+        return None
+    for student in student_db:
+        embeding = student.get('face_embedding')
+        if embeding:
+            X.append(np.array(embeding))
+            y.append(student.get('student_id'))
+
+    if len(X) == 0:
+        return None
+    
+
+    clf = SVC(kernel='linear', probability=True,class_weight='balanced') # Using a linear kernel for SVM and enabling probability estimates. class_weight='balanced' helps to handle imbalanced datasets by assigning weights inversely proportional to class frequencies.
+
+    try: 
+        clf.fit(X,y)
+    except ValueError:
+        pass
+# This function retrieves all student records from the database, extracts their face embeddings, and trains an SVM model to classify the embeddings based on student IDs. The trained model is cached to avoid retraining on every run, improving performance. If there are no students or embeddings available, it returns None.
