@@ -63,3 +63,10 @@ def get_model_trained():
     except ValueError:
         pass
 # This function retrieves all student records from the database, extracts their face embeddings, and trains an SVM model to classify the embeddings based on student IDs. The trained model is cached to avoid retraining on every run, improving performance. If there are no students or embeddings available, it returns None.
+
+
+def model_classifier():
+    st.cache_resource.clear()  # Clear the cache to force retraining of the model with updated data
+    model_data = get_model_trained()
+    return bool(model_data) 
+# This function clears the cache to ensure that the model is retrained with the most recent data from the database. It then calls get_model_trained() to train the model and returns True if the model was successfully trained (i.e., if there is training data available), or False if there was no data to train on.
