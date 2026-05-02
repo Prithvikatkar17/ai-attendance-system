@@ -62,6 +62,9 @@ def get_model_trained():
         clf.fit(X,y)
     except ValueError:
         pass
+
+    return {'clf': clf, 'X': X, 'y': y}
+
 # This function retrieves all student records from the database, extracts their face embeddings, and trains an SVM model to classify the embeddings based on student IDs. The trained model is cached to avoid retraining on every run, improving performance. If there are no students or embeddings available, it returns None.
 
 
@@ -70,3 +73,43 @@ def model_classifier():
     model_data = get_model_trained()
     return bool(model_data) 
 # This function clears the cache to ensure that the model is retrained with the most recent data from the database. It then calls get_model_trained() to train the model and returns True if the model was successfully trained (i.e., if there is training data available), or False if there was no data to train on.
+
+
+
+
+def predicted_attendance(class_image_np):
+    encodings= get_face_embeddings(class_image_np)
+
+    detected_students = []
+
+    model_data = get_model_trained()
+
+    if not model_data:
+        return detected_students,[],len(encodings)
+    
+    
+    clf = model_data['clf']
+    X_train = model_data['X']
+    y_train = model_data['y']
+
+    all_students = sorted(list(set(y_train)))
+
+    for encoding in encodings:
+        if len(all_students) >= 2: 
+            predicted_id = int(clf.predict([encoding])[0])
+        else:
+            predicted_id = int(all_students[0])  # If there's only one student, assign that student's ID to all detected faces
+
+
+        student_enbedings = X_train[y_train.index(predicted_id)]
+
+        best_match_score = np.linalg.norm(student_enbedings - encoding)
+
+        ressemblance_threshold = 0.6  # Adjust this threshold based on your requirements
+
+        if best_match_score < ressemblance_threshold:
+            detected_students[predicted_id] =True
+
+        return detected_students, all_students,len(encodings)
+# This function takes an image as input, extracts face embeddings, and uses the trained SVM
+
