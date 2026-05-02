@@ -7,7 +7,7 @@ pandas
 scikit-learn
 dlib-bin
 git+https://github.com/ageitgey/face_recognition_models
-setuptools<70.0.0
+setuptools<70.0.0  # to avoid dlib installation issues
 
 
 supabase  # give free use for database and storage
@@ -18,3 +18,6 @@ pillow  # image processing library
 
 streamlit  # for building the web app (frontend)
 
+
+librosa  # for audio processing
+resemblyzer # used for  speaker verification and voice embeddings
