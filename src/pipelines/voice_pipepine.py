@@ -46,3 +46,29 @@ def identify_speaker(new_embedding,candidates_dict , threshold=0.65):
     
     return None , best_score 
 
+
+
+def process_bulk_audio(audio_bytes , candidates_dict , threshold=0.65):
+    try:
+        encoder = load_voice_encoder()
+        audio , sr = librosa.load(io.BytesIO(audio_bytes), sr=16000)
+        segments = librosa.effects.split(audio, top_db=30)
+
+        identifiied_results = {}
+
+        for start ,end in segments:
+            if (end -start)<sr*0.5:
+                continue
+            segment_audio = audio[start:end]
+            wav = preprocess_wav(segment_audio)
+            embedding = encoder.embed_utterance(wav)
+
+            sid , score = identify_speaker(embedding , candidates_dict , threshold)
+            if sid:
+                if sid not in identifiied_results or score > identifiied_results[sid]:
+                    identifiied_results[sid] = score
+
+        return identifiied_results
+    except Exception as e:
+        st.error("bulk audio processing error")
+        return {} 
