@@ -2,22 +2,25 @@
 numpy
 pandas
 
-
-# FACE RECOGNITION
-scikit-learn
+# Face Recognition
 dlib-bin
-git+https://github.com/ageitgey/face_recognition_models
-setuptools<70.0.0  # to avoid dlib installation issues
+face-recognition==1.3.0
+scikit-learn
+setuptools<70.0.0
 
+# Backend
+supabase
+bcrypt
 
-supabase  # give free use for database and storage
-bcrypt  # for password hashing
+# QR + Image
+segno
+pillow
 
-segno # for generating QR codes
-pillow  # image processing library
+# Frontend
+streamlit
 
-streamlit  # for building the web app (frontend)
-
-
-librosa  # for audio processing
-resemblyzer # used for  speaker verification and voice embeddings
+# Voice
+librosa
+webrtcvad-wheels
+resemblyzer
+torch

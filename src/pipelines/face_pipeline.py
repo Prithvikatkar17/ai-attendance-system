@@ -1,6 +1,6 @@
 import numpy as np 
 import dlib
-import face_rcognition_models 
+import face_recognition_models 
 from sklearn.svm import SVC
 import streamlit as st 
 
@@ -15,11 +15,11 @@ def load_dlib_models():
 
 
     sp = dlib.shape_predictor(
-        face_rcognition_models.pose_predictor_model_location()
+        face_recognition_models.pose_predictor_model_location()
         )
     
     facerec = dlib.face_recognition_model_v1(
-        face_rcognition_models.face_recognition_model_location()
+        face_recognition_models.face_recognition_model_location()
         )
     
     return detector, sp, facerec
