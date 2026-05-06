@@ -13,6 +13,8 @@ def student_dashboard():
     st.header("DAASHBOARD HERE")
 
 def student_screen():
+
+    show_registration = False
        
 
     if "student_data" in  st.session_state :
@@ -38,10 +40,11 @@ def student_screen():
     st.space()
     st.space()
     
-    photo_source = st.camera_input("position your face in center")
-    if photo_source:
-        image =np.array(Image.open(photo_source))
-        detected , all_ids , num_faces = predicted_attendance(image)
+    photo_source = st.camera_input("Position your face in center")
+
+    if photo_source is not None:
+        image = np.array(Image.open(photo_source))
+        detected, all_ids, num_faces = predicted_attendance(image)
 
         if num_faces == 0:
             st.warning("No face detected. Please try again.")
@@ -57,15 +60,13 @@ def student_screen():
                     st.session_state.is_logged_in = True
                     st.session_state.user_role = 'student'
                     st.session_state.student_data = student
-                    st.toast(f'Welcome back {student['name']}')
+                    st.toast(f"Welcome back {student['name']}!")
                     time.sleep(1)
                     st.rerun()
-                
             else:
-                st.info("face not recognised ! you might be new student!")
-                show_regiration = True
-
-    if show_regiration:
+                st.info("Face not recognised! You might be a new student!")
+                show_registration = True
+    if show_registration:
         with st.container(border=True):
             st.header("Register new profile")
             new_name = st.text_input("Enter your name ", placeholder = "E.g. ganesh mali")
@@ -84,7 +85,7 @@ def student_screen():
             if st.button("Create Account ",type = "primary"):
                 if new_name:
                     with st.spinner("Creating Profile..."):
-                        img = np.array(Image.open('photo_source'))
+                        img = np.array(Image.open(photo_source))
                         encoding = get_face_embeddings(img)
                         if encoding :
                             face_emb = encoding[0].tolist()  # Convert the NumPy array to a list for JSON serialization
@@ -95,7 +96,7 @@ def student_screen():
                                 if voice_emb is not None:
                                     voice_emb = voice_emb.tolist()  # Convert to list for JSON serialization
                             
-                            response_data = create_student (new_name ,face_embeding = face_emb , voice_embeding = voice_emb)
+                            response_data = create_student (new_name ,face_embedding = face_emb , voice_embedding = voice_emb)
 
                             if response_data:
                                 model_classifier()

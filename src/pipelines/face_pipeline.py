@@ -80,7 +80,7 @@ def model_classifier():
 def predicted_attendance(class_image_np):
     encodings= get_face_embeddings(class_image_np)
 
-    detected_students = []
+    detected_students = {}
 
     model_data = get_model_trained()
 
@@ -108,8 +108,9 @@ def predicted_attendance(class_image_np):
         ressemblance_threshold = 0.6  # Adjust this threshold based on your requirements
 
         if best_match_score < ressemblance_threshold:
-            detected_students[predicted_id] =True
+             detected_students[predicted_id] = True  
 
-        return detected_students, all_students,len(encodings)
+
+    return detected_students, all_students,len(encodings)
 # This function takes an image as input, extracts face embeddings, and uses the trained SVM
 
