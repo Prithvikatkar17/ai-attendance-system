@@ -4,9 +4,22 @@ from src.components.header import header_dashboard
 from src.components.footer import footer_dashboard
 import numpy as np 
 from PIL import Image
+from src.pipelines.face_pipeline import predicted_attendance ,get_face_embeddings,model_classifier
+from src.pipelines.voice_pipepine import get_voice_embedding
+from src.database.db import get_all_students ,create_student
+import time
+
+def student_dashboard():
+    st.header("DAASHBOARD HERE")
 
 def student_screen():
        
+
+    if "student_data" in  st.session_state :
+        student_dashboard()
+        return
+
+
 
     style_background_dashboard()
     style_base_layout()
@@ -27,7 +40,80 @@ def student_screen():
     
     photo_source = st.camera_input("position your face in center")
     if photo_source:
-        np.array(Image.open(photo_source))
+        image =np.array(Image.open(photo_source))
+        detected , all_ids , num_faces = predicted_attendance(image)
+
+        if num_faces == 0:
+            st.warning("No face detected. Please try again.")
+        elif num_faces > 1:
+            st.warning("Multiple faces detected. Please ensure only one face is visible.")
+        else:
+            if detected:
+                student_id = list(detected.keys())[0]
+                all_students = get_all_students()
+                student = next((s for s in all_students if s['student_id'] == student_id), None)
+
+                if student:
+                    st.session_state.is_logged_in = True
+                    st.session_state.user_role = 'student'
+                    st.session_state.student_data = student
+                    st.toast(f'Welcome back {student['name']}')
+                    time.sleep(1)
+                    st.rerun()
+                
+            else:
+                st.info("face not recognised ! you might be new student!")
+                show_regiration = True
+
+    if show_regiration:
+        with st.container(border=True):
+            st.header("Register new profile")
+            new_name = st.text_input("Enter your name ", placeholder = "E.g. ganesh mali")
+
+
+            st.subheader("Optional : voice Enrollment")
+            st.info("Enroll your voice only attedance")
+
+            audio_data = None
+
+            try:
+                audio_data = st.audio_input("Record small prases like i am present , my name is ganesh.")
+            except Exception:
+                st.error("audio data failed !")
+
+            if st.button("Create Account ",type = "primary"):
+                if new_name:
+                    with st.spinner("Creating Profile..."):
+                        img = np.array(Image.open('photo_source'))
+                        encoding = get_face_embeddings(img)
+                        if encoding :
+                            face_emb = encoding[0].tolist()  # Convert the NumPy array to a list for JSON serialization
+
+                            voice_emb = None
+                            if audio_data:
+                                voice_emb = get_voice_embedding(audio_data)
+                                if voice_emb is not None:
+                                    voice_emb = voice_emb.tolist()  # Convert to list for JSON serialization
+                            
+                            response_data = create_student (new_name ,face_embeding = face_emb , voice_embeding = voice_emb)
+
+                            if response_data:
+                                model_classifier()
+                                st.session_state.is_logged_in = True
+                                st.session_state.user_role = 'student'
+                                st.session_state.student_data = response_data[0]
+                                st.toast(f'Profile created , Hi {new_name}')
+                                time.sleep(1)
+                                st.rerun()
+
+                        else:
+                            st.error("Couldnt Capture your facial fetures for registration")
+                    
+
+                else:
+                    st.warning("Please enter your name to create a profile.")
+
+
 
 
     footer_dashboard()
