@@ -51,3 +51,11 @@ def get_all_students():
     return response.data  
 # This function retrieves all records from the 'students' table in the database and returns them as a list of dictionaries. Each dictionary represents a student record with its corresponding fields and values.
 
+
+def create_student(new_name , face_embedding = None , voice_embedding = None):
+    data = {'name':new_name ,'face_embeding':face_embedding , 'voice_embeding': voice_embedding}
+    response = supabase.table('students').insert(data).execute()
+    return response.data
+
+
+
