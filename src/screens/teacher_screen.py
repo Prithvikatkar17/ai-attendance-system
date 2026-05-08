@@ -62,9 +62,32 @@ def teacher_dashboard():
             st.session_state.current_teacher_tab = 'attendance_records'
             st.rerun()
 
+
+    st.divider()
+
+    if st.session_state.current_teacher_tab == "take_attendance":
+        teacher_tab_take_attendance()
+    if st.session_state.current_teacher_tab == "manage_subjects":
+        teacher_tab_manage_subject()
+    if st.session_state.current_teacher_tab == "attendance_records":
+        teacher_tab_attendance_records()
+
     footer_dashboard()
 
-    
+
+def teacher_tab_take_attendance():
+    st.header('Take AI attendance')
+
+def teacher_tab_manage_subject():
+    teacher_id = st.session_state.teacher_data['teacher_id']
+    col1 ,col2 = st.columns(2)
+    with col1:
+        st.header('Manage subjects',width='stretch')
+    with col2:
+        st.button('Create new Subject',width='stretch')
+
+def teacher_tab_attendance_records():
+    st.header('Attendance Records')
 
 
 
