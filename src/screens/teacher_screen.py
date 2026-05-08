@@ -22,10 +22,35 @@ def teacher_screen():
 
 def teacher_dashboard():
     data = st.session_state.teacher_data
+    c1, c2 = st.columns(2,vertical_alignment='center',gap='xxlarge')
+    with c1:
+        header_dashboard()
+    with c2:
+        st.subheader(f"""
+            Welcome ,{data['name']}!
+            """)
+        if st.button("Logout",type='secondary',icon=':material/arrow_back:',
+            key='loginbackbtn',shortcut='ctrl+backspace',icon_position='left'):
+            st.session_state['is_loged_in'] = False
+            del st.session_state.teacher_data
+            st.rerun()
 
-    st.header(f"""
-    Welcome ,{data['name']}!
-    """)
+    
+    st.space()
+
+    if 'current_teacher_tab' not in st.session_state:
+        st.session_state.current_teacher_tab = 'take_attendance'
+
+    tab1 ,tab2,tab3 = st.columns(3)
+
+    with tab1:
+        if st.button('Take attendance',width='strech',icon =':material/ar_on_you:'):
+            st.session_state.current_teacher_tab = 'take_attendance'
+            st.rerun()
+
+    footer_dashboard()
+
+    
 
 
 
