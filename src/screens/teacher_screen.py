@@ -44,8 +44,22 @@ def teacher_dashboard():
     tab1 ,tab2,tab3 = st.columns(3)
 
     with tab1:
-        if st.button('Take attendance',width='strech',icon =':material/ar_on_you:'):
+        type1="primary" if  st.session_state.current_teacher_tab == 'take_attendance' else "tertiary"
+        if st.button('Take attendance', type = type1 , width='stretch',icon =':material/ar_on_you:'):
             st.session_state.current_teacher_tab = 'take_attendance'
+            st.rerun()
+
+    with tab2:
+        type2 = "primary" if  st.session_state.current_teacher_tab == 'manage_subjects' else "tertiary"
+        if st.button('Manage Subjects',type = type2 ,width='stretch',icon =':material/book_ribbon:'):
+            st.session_state.current_teacher_tab = 'manage_subjects'
+            st.rerun()
+
+    with tab3:
+        type3 = "primary" if  st.session_state.current_teacher_tab == 'attendance_records' else "tertiary"
+
+        if st.button('Attendance Records',type = type3 ,width='stretch',icon =':material/cards_stack:'):
+            st.session_state.current_teacher_tab = 'attendance_records'
             st.rerun()
 
     footer_dashboard()

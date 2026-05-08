@@ -47,13 +47,13 @@ def style_base_layout():
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 
-        /* hide top bar of streamlit */
-        #MainMenu ,footer, header {
-            visibility: hidden;   
-                }
-        .block-container {
-                padding-top: 1.5rem  !important;
-                }  
+        # /* hide top bar of streamlit */
+        # #MainMenu ,footer, header {
+        #     visibility: hidden;   
+        #         }
+        # .block-container {
+        #         padding-top: 1.5rem  !important;
+        #         }  
         
                 
         h1{
@@ -73,7 +73,7 @@ def style_base_layout():
 
         h3{
             font-family: 'Russo One', sans-serif !important;
-            font-size: 2.5rem !important;}    
+            font-size: 1.5rem !important;}    
 
 
         h4,p{
@@ -102,7 +102,7 @@ def style_base_layout():
 
         button[kind="tertiary"] {
                 border-radius: 1.5rem !important;
-                background-color: #10B981  !important;
+                background-color: #8B5CF6   !important;
                 color: white !important;
                 padding: 0.5rem 1.5rem !important;
                 border: none !important;
