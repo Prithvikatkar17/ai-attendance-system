@@ -3,9 +3,9 @@ import streamlit as st
 from src.ui.base_layout import  style_base_layout , style_background_dashboard
 from src.components.header import header_dashboard
 from src.components.footer import footer_dashboard
-from src.database.db import check_teacher_exists, create_teacher, teacher_login
+from src.database.db import check_teacher_exists, create_teacher, teacher_login,get_teacher_subject
 from src.components.dialog_create_subject import create_subject_dialog
-
+from src.components.subject_card import subject_card
 
 def teacher_screen():
     style_background_dashboard()
@@ -89,7 +89,7 @@ def teacher_tab_manage_subject():
 
     
     # LIST all SUBJECTS
-    subjects = get_teacher_subjects(teacher_id)
+    subjects = get_teacher_subject(teacher_id)
     if subjects:
         for sub in subjects:
             stats = [
