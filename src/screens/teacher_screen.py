@@ -6,6 +6,8 @@ from src.components.footer import footer_dashboard
 from src.database.db import check_teacher_exists, create_teacher, teacher_login,get_teacher_subject
 from src.components.dialog_create_subject import create_subject_dialog
 from src.components.subject_card import subject_card
+from src.components.dialog_share_subject import share_subject_dialog
+
 
 def teacher_screen():
     style_background_dashboard()
