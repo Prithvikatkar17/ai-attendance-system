@@ -8,6 +8,8 @@ from src.pipelines.face_pipeline import predicted_attendance ,get_face_embedding
 from src.pipelines.voice_pipepine import get_voice_embedding
 from src.database.db import get_all_students ,create_student
 import time
+from src.components.dialog_enroll import enroll_dialog
+
 
 def student_dashboard():
     data = st.session_state.student_data
@@ -27,7 +29,13 @@ def student_dashboard():
 
     st.space()
 
-    
+    c1 ,c2 = st.columns(2)
+    with c1:
+        st.header("Your Enrolled Subjects ")
+    with c2:
+        if st.button("Enroll New Subject",type='primary',width='stretch'):
+            enroll_dialog()
+
 
     footer_dashboard()
 
