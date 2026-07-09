@@ -14,76 +14,78 @@ from src.components.subject_card import subject_card
 def student_dashboard():
     student_data = st.session_state.student_data
     student_id = student_data['student_id']
-    c1, c2 = st.columns(2,vertical_alignment='center',gap='xxlarge')
+    
+    # Header Section
+    c1, c2 = st.columns(2, vertical_alignment='center', gap='xxlarge')
     with c1:
         header_dashboard()
     with c2:
-        st.subheader(f"""
-            Welcome ,{student_data['name']}!
-            """)
-        if st.button("Logout",type='secondary',icon=':material/arrow_back:',
-            key='loginbackbtn',shortcut='ctrl+backspace',icon_position='left'):
+        st.subheader(f"Welcome, {student_data['name']}!")
+        if st.button("Logout", type='secondary', icon=':material/arrow_back:',
+            key='loginbackbtn', shortcut='ctrl+backspace', icon_position='left'):
             st.session_state['is_loged_in'] = False
             del st.session_state.student_data
             st.rerun()
 
-
     st.space()
 
-    c1 ,c2 = st.columns(2)
+    # Subjects Header
+    c1, c2 = st.columns(2)
     with c1:
-        st.header("Your Enrolled Subjects ")
+        st.header("Your Enrolled Subjects")
     with c2:
-        if st.button("Enroll New Subject",type='primary',width='stretch'):
+        if st.button("Enroll New Subject", type='primary', width='stretch'):
             enroll_dialog()
 
-    
-    st.divider()    
+    st.divider()
 
+    # Fetch Data
     with st.spinner("Fetching your subjects..."):
         subjects = get_student_subjects(student_id)
         logs = get_student_attendance(student_id)
 
+    # Build Status Map
     status_map = {}
-
     for log in logs:
         sid = log['subject_id']
-
         if sid not in status_map:
-            status_map[sid] = {'present': 0, 'absent': 0}
-        
+            status_map[sid] = {'total': 0, 'present': 0}
         status_map[sid]['total'] += 1
-
         if log.get('is_present'):
             status_map[sid]['present'] += 1
 
-        cols = st.columns(2)
-        for i,sub_node in enumerate(subjects):
-            sub = sub_node['subjects']
-            sid = sub['subject_id']
-            
-            status = status_map.get(sid, {'total': 0, 'attended': 0})
+    # Render Subject Cards
+    cols = st.columns(2)
+    for i, sub_node in enumerate(subjects):
+        sub = sub_node['subjects']
+        sid = sub['subject_id']
 
-            def unenroll_btn():
-                if st.button('Unenroll from this subject',type='tertiary',width='stretch'):
-                    unenroll_student_from_subject(student_id, sid)
-                    st.toast(f'Unenrolled from {sub["name"]}')
-                    st.rerun()
+        status = status_map.get(sid, {'total': 0, 'present': 0})
 
+        # ✅ Fix 2 - closure fix with default arguments
+        def unenroll_btn(sid=sid, sub=sub):
+            if st.button(
+                "Unenroll from this subject",
+                type="secondary",
+                width="stretch",
+                key=f"unenroll_{sid}"  # ✅ unique key for each button
+            ):
+                unenroll_student_from_subject(student_id, sid)
+                st.toast(f'Unenrolled from {sub["name"]}')
+                st.rerun()
 
-            with cols[i % 2]:
-                subject_card(      
-                    name=sub['name'],
-                    code=sub['subject_code'],
-                    section=sub['section'],
-                    status=[
-                        ('🗓️', 'Total', status['total']),
-                        ('☑️','Attended', status['attended']),
-                    ],
-                    footer_callback=unenroll_btn
-                    )
-            
-                
+        with cols[i % 2]:
+            subject_card(
+                name=sub['name'],
+                code=sub['subject_code'],
+                section=sub['section'],
+                stats=[                          # ✅ Fix 1 - 'stats' not 'status'
+                    ('🗓️', 'Total', status['total']),
+                    ('☑️', 'Present', status['present']),
+                ],
+                footer_callback=unenroll_btn
+            )
+
     footer_dashboard()
 
 def student_screen():
