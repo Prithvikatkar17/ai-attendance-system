@@ -60,7 +60,7 @@ def get_teacher_subjects(teacher_id):
         sub['total_classes'] = unique_sessions
 
 
-        sub.pop('subject_student', None)
+        sub.pop('subject_students', None)
         sub.pop('attendance_logs', None)
 
     return subjects
