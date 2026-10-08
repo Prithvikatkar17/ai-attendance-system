@@ -27,6 +27,10 @@ def student_dashboard():
             del st.session_state.student_data 
             st.rerun()
 
+    if 'join-code' in st.query_params:
+        from src.components.dialog_auto_enroll import auto_enroll_dialog
+        auto_enroll_dialog(st.query_params['join-code'])
+
 
     st.space()
 

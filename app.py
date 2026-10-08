@@ -7,7 +7,10 @@ from src.screens.student_screen import student_screen
 def main():
     
     if 'login_type' not in st.session_state:
-        st.session_state['login_type'] = None
+        if 'join-code' in st.query_params:
+            st.session_state['login_type'] = 'student'
+        else:
+            st.session_state['login_type'] = None
 
     match st.session_state['login_type']:
         case 'teacher':
