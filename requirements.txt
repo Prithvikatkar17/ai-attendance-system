@@ -25,3 +25,4 @@ librosa
 webrtcvad-wheels
 resemblyzer
 torch
+requests # cache-buster for Streamlit Cloud
