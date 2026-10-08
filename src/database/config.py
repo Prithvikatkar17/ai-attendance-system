@@ -1,8 +1,8 @@
 import streamlit as st
 from supabase import create_client, Client
 
-url = st.secrets.get("SUPABASE_URL", "NOT_FOUND")
-key = st.secrets.get("SUPABASE_KEY", "NOT_FOUND")
+url = st.secrets.get("SUPABASE_URL", "NOT_FOUND").strip().strip('"').strip("'")
+key = st.secrets.get("SUPABASE_KEY", "NOT_FOUND").strip().strip('"').strip("'")
 
 if url == "NOT_FOUND" or key == "NOT_FOUND":
     st.error("🚨 SUPABASE SECRETS ARE MISSING IN STREAMLIT CLOUD!")
