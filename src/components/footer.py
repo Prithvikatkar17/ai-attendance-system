@@ -5,7 +5,7 @@ def footer_home():
     
     st.markdown(f"""
         <div style="margin-top:50px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                <p> Created with ❤️ by SnapRoll Team </p>
+                <p> Created with ❤️ by Attendly Team </p>
         </div>   
                 
                 """, unsafe_allow_html=True)
@@ -15,7 +15,7 @@ def footer_dashboard():
     
     st.markdown(f"""
         <div style="margin-top:50px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                <p> Created with ❤️ by SnapRoll Team </p>
+                <p> Created with ❤️ by Attendly Team </p>
         </div>   
                 
                 """, unsafe_allow_html=True)
